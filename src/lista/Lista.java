@@ -1,5 +1,7 @@
 package lista;
 
+import com.sun.org.apache.bcel.internal.generic.DADD;
+
 public class Lista {
 	
 	private int pri_ocup;
@@ -55,7 +57,7 @@ public class Lista {
 		
 		//altera o valor do pri_livre para o proximo livre;
 		pri_livre = array_prox[pri_livre];
-	}
+	}//inserirNoFinal
 	
 	
 	public void inserirNoInicio(int elemento) throws Exception{
@@ -73,7 +75,61 @@ public class Lista {
 		array_prox[ult_ocup] = array_prox[pri_livre];
 		//aponta o atual primeiro item da lista para o antigo primeiro atual segundo item
 		array_prox[pri_ocup] = temp_pri_ocup;
-	}
+		
+	}//inserirNoInicio
 	
+	
+	public void inserirNaPosicao(int posicao, int elemento) throws Exception{
+		
+		//verifica se a lista esta cheia
+		if(listaCheia()) throw new Exception("Lista Cheia");
+		//verifica se a posição esta dentro dos parâmetros para inserir valor no meio
+		if(posicao-1 < 0 || posicao >= array_prox.length) 
+			throw new Exception("Posição fora dos parâmetros da lista");
+		//insere o elemento na lista
+		lista_dados[pri_livre] = elemento;
+		
+		
+		int temp_pos_item_anterior;
+		//percorre a lista de posições
+		for(int i = 0; i < array_prox.length; i++){
+			//encontra a posicao "posicao-"'
+			if(array_prox[i] == posicao -1){
+				// salva a posição de "posicao-1" em variavel temporaria
+				temp_pos_item_anterior = array_prox[i];
+				//aponta o "posicao -1" para a nova 
+				array_prox[i] = pri_livre;
+			}
+		}
+		
+		array_prox[pri_livre] = temp_pos_item_anterior;
+		
+		
+	}//inserirNaPosicao
+	
+	
+	public void inserirAntes(int posicao, int elemento) throws Exception{
+		
+	}//inserirAntes
+	
+	public void inserirDepois(int posicao, int elemento) throws Exception{
+		
+	}//inserirDepois
+	
+	public void removerItem(int posicao) throws Exception{
+		
+	}//removerItem
+	
+	public void removerPrimeiro() throws Exception{
+		
+	}//removerPrimeiro
+	
+	public void removerUltimo() throws Exception{
+		
+	}//removerUltimo
+	
+	public boolean buscar(int elemento) throws Exception{
+	
+	}//buscarElemento
+	}
 
-}
