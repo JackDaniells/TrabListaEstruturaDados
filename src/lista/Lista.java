@@ -151,12 +151,82 @@ public class Lista {
 	
 	public void inserirAntes(int valorBase, int valorInserido) throws Exception{
 		
+		if(listaCheia())throw new Exception("Lista Cheia");
+		
+
+		int pos_lista = pri_ocup;
+		int pos_ant_lista = pri_ocup;
+
+		
+		for(int i = 0; i< qtde_itens; i++){
+			if(lista_dados[pos_lista] == valorBase){
+				
+				if(i == 0){
+					inserirNoInicio(valorInserido);
+					break;
+				
+				}else{
+					int temp_pri_livre = array_prox[pri_livre];
+					
+					lista_dados[pri_livre] = valorInserido;
+
+					array_prox[pri_livre] = array_prox[pos_ant_lista];
+					array_prox[pos_ant_lista] = array_prox[ult_ocup];
+					array_prox[ult_ocup] = temp_pri_livre;
+					
+					pri_livre= array_prox[pri_livre];
+					qtde_itens++;
+					break;
+					
+				}
+			
+			}else{
+				
+				pos_ant_lista = pos_lista;
+				pos_lista = array_prox[pos_lista];
+			}
+		}
+		
 		
 	}//inserirAntes
 	
 	
 	
 	public void inserirDepois(int valorBase, int valorInserido) throws Exception{
+		
+		if(listaCheia())throw new Exception("Lista Cheia");
+		
+
+		int pos_lista = pri_ocup;
+
+		
+		for(int i = 0; i< qtde_itens; i++){
+			if(lista_dados[pos_lista] == valorBase){
+				
+				if(i == qtde_itens - 1){
+					inserirNoFinal(valorInserido);
+					break;
+				
+				}else{
+					int temp_pri_livre = array_prox[pri_livre];
+					
+					lista_dados[pri_livre] = valorInserido;
+
+					array_prox[pri_livre] = array_prox[pos_lista];
+					array_prox[pos_lista] = array_prox[ult_ocup];
+					array_prox[ult_ocup] = temp_pri_livre;
+					
+					pri_livre= array_prox[pri_livre];
+					qtde_itens++;
+					break;
+					
+				}
+			
+			}else{
+				
+				pos_lista = array_prox[pos_lista];
+			}
+		}
 		
 	}//inserirDepois
 	
@@ -209,7 +279,6 @@ public class Lista {
 		
 		if(listaVazia()) throw new Exception("Lista Vazia");
 
-		int pos_prox_lista = array_prox[pri_ocup];
 		int pos_lista = pri_ocup;
 		int pos_ant_lista = pri_ocup;
 
@@ -218,16 +287,13 @@ public class Lista {
 			if(lista_dados[pos_lista] == valor){
 				
 				if(i == 0){
-					System.out.println("Removeu primeiro");
 					removerPrimeiro();
 				
 				}else if(i == qtde_itens -1){
-					System.out.println("Removeu ultimo");
 					removerUltimo();
 				
 				}else{					
-					System.out.println("Removeu no meio");
-
+					
 					array_prox[ult_ocup] = array_prox[pos_ant_lista]; 
 					array_prox[pos_ant_lista] = array_prox[pos_lista];
 					array_prox[pos_lista] = pri_livre;
@@ -240,13 +306,11 @@ public class Lista {
 			}else{
 				
 				pos_ant_lista = pos_lista;
-				pos_lista = pos_prox_lista;
-				pos_prox_lista = array_prox[pos_prox_lista];
+				pos_lista = array_prox[pos_lista];
 			}
 		}
 		
 	}//removerItem
-	
 	
 	
 	
