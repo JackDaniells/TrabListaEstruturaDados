@@ -27,6 +27,8 @@ public class Lista {
 		
 	}
 	
+	
+	
 	public boolean listaCheia(){
 		/*
 		*  verifica se o item na posição do pri_livre no array_prox é -1,
@@ -34,6 +36,8 @@ public class Lista {
 		*/
 		return qtde_itens == lista_dados.length;
 	}
+	
+	
 	
 	public boolean listaVazia(){
 		/*
@@ -45,7 +49,8 @@ public class Lista {
 	}
 	
 	
-	public void inserirNoFinal(int elemento) throws Exception{
+	
+	public void inserirNoFinal(int valor) throws Exception{
 		
 		//verifica se a lista esta cheia
 		if(listaCheia()) throw new Exception("Lista Cheia");
@@ -54,8 +59,8 @@ public class Lista {
 		if(listaVazia()) pri_ocup = pri_livre;
 		ult_ocup = pri_livre;
 		
-		//insere o elemento na lista
-		lista_dados[pri_livre] = elemento;
+		//insere o valor na lista
+		lista_dados[pri_livre] = valor;
 		//altera o valor do pri_livre para o proximo livre;
 		pri_livre = array_prox[pri_livre];
 		
@@ -65,7 +70,8 @@ public class Lista {
 	}//inserirNoFinal
 	
 	
-	public void inserirNoInicio(int elemento) throws Exception{
+	
+	public void inserirNoInicio(int valor) throws Exception{
 		
 		//verifica se a lista esta cheia
 		if(listaCheia()) throw new Exception("Lista Cheia");
@@ -74,16 +80,14 @@ public class Lista {
 		int temp_pri_ocup = pri_ocup;
 		//altera o primeiro ocupado para a pos do item que esta sendo inserido
 		pri_ocup = array_prox[ult_ocup];
-		System.out.println("Pri oc " +pri_ocup);
 		//altera o proximo item do ult_ocup para o do primeiro livre
 		array_prox[ult_ocup] = array_prox[pri_livre];
-		
-		
 		//aponta o atual primeiro item da lista para o antigo primeiro atual segundo item
 		array_prox[pri_livre] = temp_pri_ocup;
 		
-		//insere o elemento na lista
-		lista_dados[pri_livre] = elemento;
+		
+		//insere o valor na lista
+		lista_dados[pri_livre] = valor;
 		//altera o valor do pri_livre para o proximo livre;
 		pri_livre = array_prox[pri_livre];
 		
@@ -92,104 +96,213 @@ public class Lista {
 	}//inserirNoInicio
 	
 	
-	public void inserirNaPosicao(int posicao, int elemento) throws Exception{
+	
+	public void inserirNaPosicao(int posicao, int valor) throws Exception{
 		
 		//verifica se a lista esta cheia
 		if(listaCheia()) throw new Exception("Lista Cheia");
 		//verifica se a posição esta dentro dos parâmetros para inserir valor no meio
-		if(posicao-1 < 0 || posicao >= array_prox.length) 
+		if(posicao-1 < 0 || posicao >= lista_dados.length) 
 			throw new Exception("Posição fora dos parâmetros da lista");
-		//insere o elemento na lista
-		lista_dados[pri_livre] = elemento;
+		
 		
 		//variável temporaria para o proximo item da lista
-		int pos_proximo_array = array_prox[pri_ocup];
+		int pos_proximo_item_array = pri_ocup;
 		
-		//percorre a lista de posições
-		for(int i = 0; i < array_prox.length; i++){
+		//tratamento especial para o primeiro e o ultimo item da lista
+		if (posicao == 0){
+			
+			inserirNoInicio(valor);
+			
+		}else if(posicao == lista_dados.length-1 || posicao >= qtde_itens){
+			inserirNoFinal(valor);
+			
+		}else{
+		  //percorre a lista de posições
+		  for(int i = 1; i <= array_prox.length; i++){
 			
 			if(i == posicao){
 				//variável temporaria para posicao -1
-				int temp_pos_item_anterior = array_prox[pos_proximo_array];
+				int temp_pos_item_anterior = array_prox[pos_proximo_item_array];
 			
-				array_prox[pos_proximo_array] = pri_livre;
+				array_prox[pos_proximo_item_array] = pri_livre;
+				array_prox[ult_ocup] = array_prox[pri_livre];
 				array_prox[pri_livre] = temp_pos_item_anterior;
+				
+				//insere o valor na lista
+				lista_dados[pri_livre] = valor;
+				
+				//altera o valor do pri_livre para o proximo livre;
+				pri_livre = array_prox[pri_livre];
+				
+				qtde_itens++;
 						
 			}else{
-				pos_proximo_array = array_prox[pos_proximo_array];
+				pos_proximo_item_array = array_prox[pos_proximo_item_array];
 			}
 			
+		  }//for
+		  
 		}
-		
-		//altera o valor do pri_livre para o proximo livre;
-		pri_livre = array_prox[pri_livre];
-		
-		qtde_itens++;
 		
 	}//inserirNaPosicao
 	
 	
-	public void inserirAntes(int posicao, int elemento) throws Exception{
+	
+	public void inserirAntes(int valorBase, int valorInserido) throws Exception{
 		
 		
-		qtde_itens++;
 	}//inserirAntes
 	
-	public void inserirDepois(int posicao, int elemento) throws Exception{
+	
+	
+	public void inserirDepois(int valorBase, int valorInserido) throws Exception{
 		
-		qtde_itens++;
 	}//inserirDepois
 	
-	public void removerItem(int posicao) throws Exception{
-		
-		qtde_itens--;
-	}//removerItem
+	
+	
 	
 	public void removerPrimeiro() throws Exception{
 		
+		if(listaVazia()) throw new Exception("Lista Vazia");
+		
+		int temp_pri_livre = pri_livre;
+		
+		pri_livre = pri_ocup;
+		
+		pri_ocup = array_prox[pri_ocup];
+		
+		array_prox[pri_livre] = temp_pri_livre;
+		
+		array_prox[ult_ocup] = pri_livre;
+		
 		qtde_itens--;
+
+		
 	}//removerPrimeiro
+	
+	
+	
 	
 	public void removerUltimo() throws Exception{
 		
-		qtde_itens--;
-	}//removerUltimo
-	
-	public boolean buscar(int elemento) throws Exception{
+		if(listaVazia()) throw new Exception("Lista Vazia");
 		
-		return true;
-	
-	}//buscarElemento
-	
-	@Override
-	public String toString(){
+		pri_livre = ult_ocup;
 		
-		String array_retorno = "[";
+		for(int i = 0; i < array_prox.length; i++){
+			if(array_prox[i] == ult_ocup){
 				
-		//variável temporaria para o proximo item da lista
-		
-		int pos_proximo_array = pri_ocup;
+				ult_ocup = i;
+				qtde_itens--;
 				
-		//percorre a lista de posições
-	
-		/*for(int i = 0; i < array_prox.length; i++){			
-			
-			array_retorno += lista_dados[pos_proximo_array];
-			
-			if(array_prox[pos_proximo_array] == -1 || qtde_itens-1 == i)break;
-			else{
-			pos_proximo_array = array_prox[pos_proximo_array];
-			array_retorno += ", ";
 			}
-			
-		}*/
-		
-		System.out.println(pri_ocup);
-		for(int i : array_prox){
-			array_retorno += i + ", ";
 		}
 		
-		return array_retorno + "]";  
+	}//removerUltimo
+	
+	
+	
+	
+	public void removerItem(int valor) throws Exception{
+		
+		if(listaVazia()) throw new Exception("Lista Vazia");
+
+		int pos_prox_lista = array_prox[pri_ocup];
+		int pos_lista = pri_ocup;
+		int pos_ant_lista = pri_ocup;
+
+		
+		for(int i = 0; i< qtde_itens; i++){
+			if(lista_dados[pos_lista] == valor){
+				
+				if(i == 0){
+					System.out.println("Removeu primeiro");
+					removerPrimeiro();
+				
+				}else if(i == qtde_itens -1){
+					System.out.println("Removeu ultimo");
+					removerUltimo();
+				
+				}else{					
+					System.out.println("Removeu no meio");
+
+					array_prox[ult_ocup] = array_prox[pos_ant_lista]; 
+					array_prox[pos_ant_lista] = array_prox[pos_lista];
+					array_prox[pos_lista] = pri_livre;
+					pri_livre = pos_lista;
+					qtde_itens--;
+					break;
+					
+				}
+			
+			}else{
+				
+				pos_ant_lista = pos_lista;
+				pos_lista = pos_prox_lista;
+				pos_prox_lista = array_prox[pos_prox_lista];
+			}
+		}
+		
+	}//removerItem
+	
+	
+	
+	
+	
+	public boolean buscar(int valor) throws Exception{
+		
+		
+		int posicaoLista = pri_ocup;
+		
+		for(int i = 0; i< qtde_itens; i++){
+			if(lista_dados[posicaoLista] == valor){
+				return true;
+			
+			}else{
+				posicaoLista = array_prox[posicaoLista];
+			}
+		}
+		return false;
+	}//buscar
+	
+	
+	
+	
+	public void imprimeLista(){
+		
+		System.out.println("Primeiro Ocupado: " + pri_ocup);
+		System.out.println("Último Ocupado: " + ult_ocup);
+		System.out.println("Primeiro Livre: " + pri_livre);
+		
+		String dados_lista = "[";
+
+		int posicaoLista = pri_ocup;
+		
+		for(int i = 0; i< qtde_itens; i++){
+			
+			dados_lista+= lista_dados[posicaoLista] + ", ";
+			posicaoLista = array_prox[posicaoLista];
+			
+		}
+		
+		dados_lista += "]";
+		
+		System.out.println("Lista de Dados: \n"+ dados_lista);
+		
+		
+		String array_pos = "[";
+		
+		for(int i : array_prox){
+			array_pos += i + ", ";
+		}
+		
+		array_pos += "]";  
+
+		System.out.println("Array Pŕoximo: \n"+ array_pos);
+			
+		
 	}
 }//
 
